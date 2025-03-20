@@ -1,0 +1,194 @@
+---
+title: Add Two Numbers
+description: Given two non-empty linked lists representing non-negative integers, add the corresponding nodes and return the result list.
+date: 2024-03-14
+tag: ["Medium", "Linked List"]
+author: Easy Algo
+premium: false
+percentage: 30
+---
+
+## Problem
+
+> LeetCode link: [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/)
+
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each node contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+**Example 1:**
+```
+Input: l1 = [2,4,3], l2 = [5,6,4]
+Output: [7,0,8]
+Explanation: 342 + 465 = 807.
+```
+
+**Example 2:**
+```
+Input: l1 = [0], l2 = [0]
+Output: [0]
+```
+
+**Example 3:**
+```
+Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+Output: [8,9,9,9,0,0,0,1]
+```
+
+**Constraints:**
+```
+The number of nodes in each linked list is in the range [1, 100]
+0 <= Node.val <= 9
+It is guaranteed that the list represents a number that does not have leading zeros
+```
+
+Follow up: Could you devise an algorithm that runs in less than O(n^2) time complexity?
+
+## Solution
+
+**Problem Simplified:**
+
+Imagine you're a grade school student, and your teacher gives you two numbers represented by cards laid out in columns. Each column shows digits arranged from right to left (ones place, tens place, hundreds place, etc.). Your task is to add these numbers and display the result in the same format. The problem guarantees that neither number will have unnecessary zeros at the front (like "012").
+
+**Edge Cases and Test Examples:**
+
+*   **Edge Cases:**
+    *   Although the problem specifies non-empty lists, consider handling empty list inputs by returning the other list.
+    *   Single node cases.
+    *   Lists of different lengths.
+    *   Cases requiring carry to the most significant digit.
+
+*   **Test Cases:**
+
+    | Input (l1, l2) | Output |
+    |---|---|
+    | `([2,4,3], [5,6,4])` | `[7,0,8]` |
+    | `([0], [0])` | `[0]` |
+    | `([9,9,9,9,9,9,9], [9,9,9,9])` | `[8,9,9,9,0,0,0,1]` |
+    | `([2,4,3], [5,6])` | `[7,0,4]` |
+    | `([9,9,9], [1])` | `[0,0,0,1]` |
+
+**Solution Analysis:**
+
+| Approach | Advantages | Disadvantages | Time Complexity | Space Complexity |
+|---|---|---|---|---|
+| Direct List Addition | Intuitive, easy to understand | Needs carry handling | O(max(m,n)) | O(max(m,n)) |
+| Integer Conversion | Simple concept | May exceed integer limits | O(m+n) | O(1) |
+| Recursive | Clean code | Potential stack overflow | O(max(m,n)) | O(max(m,n)) |
+
+*   **Complexity Analysis:**
+    *   Time Complexity: Measures how execution time relates to input size. For example, O(n) means execution time grows linearly with list length n.
+    *   Space Complexity: Measures how additional memory usage relates to input size.
+
+*   **Recommended Approach:**
+
+    Direct list addition is the most intuitive and memorable approach, making it ideal for interview situations.
+
+**Python Implementation:**
+
+*   **Version 1: With Detailed Comments**
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def addTwoNumbers(l1, l2):
+    """
+    Add two numbers represented by linked lists.
+
+    Args:
+        l1: Head node of the first linked list.
+        l2: Head node of the second linked list.
+
+    Returns:
+        Head node of the linked list representing the sum.
+    """
+
+    dummy_head = ListNode(0)  # Create a dummy node as the head of result list
+    current = dummy_head      # current pointer for building result list
+    carry = 0                 # carry digit
+
+    # Loop through lists until both are empty and no carry remains
+    while l1 or l2 or carry:
+        # Get current node values, use 0 if list is empty
+        x = l1.val if l1 else 0
+        y = l2.val if l2 else 0
+
+        # Calculate sum including carry
+        sum_val = x + y + carry
+
+        # Update carry
+        carry = sum_val // 10
+
+        # Calculate current digit
+        digit = sum_val % 10
+
+        # Create new node with current digit
+        current.next = ListNode(digit)
+
+        # Move current pointer to next node
+        current = current.next
+
+        # Move l1 and l2 pointers if lists not empty
+        if l1:
+            l1 = l1.next
+        if l2:
+            l2 = l2.next
+
+    # Return head of result list (skip dummy node)
+    return dummy_head.next
+```
+
+*   **Version 2: Clean Implementation**
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def addTwoNumbers(l1, l2):
+    dummy_head = ListNode(0)
+    current = dummy_head
+    carry = 0
+
+    while l1 or l2 or carry:
+        x = l1.val if l1 else 0
+        y = l2.val if l2 else 0
+
+        sum_val = x + y + carry
+        carry = sum_val // 10
+        digit = sum_val % 10
+
+        current.next = ListNode(digit)
+        current = current.next
+
+        if l1:
+            l1 = l1.next
+        if l2:
+            l2 = l2.next
+
+    return dummy_head.next
+```
+
+**Step-by-Step Execution:**
+
+Let's walk through with input `l1 = [2,4,3], l2 = [5,6,4]`:
+
+1.  Initialize: Create `dummy_head`, set `current` to `dummy_head`, and `carry = 0`.
+2.  Loop while `l1`, `l2`, or `carry` exists:
+    *   First iteration:
+        *   `x = 2, y = 5`
+        *   `sum_val = 7, carry = 0`
+        *   Create node with value 7
+    *   Second iteration:
+        *   `x = 4, y = 6`
+        *   `sum_val = 10, carry = 1`
+        *   Create node with value 0
+    *   Third iteration:
+        *   `x = 3, y = 4, carry = 1`
+        *   `sum_val = 8, carry = 0`
+        *   Create node with value 8
+3.  Return: Return `dummy_head.next`, giving us result list `[7,0,8]`.

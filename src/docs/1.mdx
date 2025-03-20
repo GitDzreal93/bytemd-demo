@@ -1,0 +1,152 @@
+---
+title: Two Sum
+description: Find indices of two numbers in an integer array that sum up to a target value, with optimized time complexity.
+date: 2024-03-14
+tag: ["Easy", "Array"]
+author: Easy Algo
+premium: false
+percentage: 30
+---
+
+## Problem
+
+> LeetCode link: [Two Sum](https://leetcode.com/problems/two-sum/)
+
+Given an array of integers `nums` and an integer `target`, find two numbers in the array that add up to the target value and return their array indices.
+
+You may assume that each input has exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+**Example 1**:
+
+```
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+```
+
+**Example 2**:
+```
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+```
+
+**Example 3**:
+```
+Input: nums = [3,3], target = 6
+Output: [0,1]
+```
+
+**Constraints**:
+```
+2 <= nums.length <= 104
+-109 <= nums[i] <= 109
+-109 <= target <= 109
+Exactly one valid answer exists
+```
+
+Follow-up: Can you devise an algorithm with a time complexity better than O(n²)?
+
+## Solution
+
+**Problem Simplified:**
+
+Imagine you have a deck of number cards and a target number. Your task is to find two cards that sum up to the target number. When you find them, you need to report their positions (indices) in the deck. Remember, you can't use the same card twice, and there's always exactly one valid pair.
+
+**Edge Cases and Test Examples:**
+
+*   **Edge Cases:**
+    *   Minimum array length is 2
+    *   Numbers in the array and target value can be very large or very small
+
+*   **Test Cases:**
+
+    | Input (nums, target) | Output |
+    |---|---|
+    | `([2, 7, 11, 15], 9)` | `[0, 1]` |
+    | `([3, 2, 4], 6)` | `[1, 2]` |
+    | `([3, 3], 6)` | `[0, 1]` |
+    | `([-1, -3, 5], 2)` | `[0, 2]` |
+    | `([1, 5, -2, 8], 6)` | `[1, 2]` |
+
+**Solution Analysis:**
+
+| Approach | Advantages | Disadvantages | Time Complexity | Space Complexity |
+|---|---|---|---|---|
+| Brute Force | Simple and straightforward | Inefficient | O(n²) | O(1) |
+| Hash Table | Highly efficient | Requires extra space | O(n) | O(n) |
+
+*   **Complexity Analysis:**
+    *   Time Complexity: Measures how runtime grows with input size
+    *   Space Complexity: Measures how memory usage grows with input size
+
+*   **Recommended Approach:**
+
+    Hash Table approach offers the best balance between time and space efficiency, and it's easy to explain and implement in interviews.
+
+**Python Implementation:**
+
+*   **Version 1: With Detailed Comments**
+
+```python
+def two_sum(nums, target):
+    """
+    Find two numbers in an array that add up to the target value.
+
+    Args:
+        nums: Array of integers
+        target: Target sum value
+
+    Returns:
+        List containing indices of the two numbers, or None if not found
+    """
+    num_map = {}  # Hash table to store numbers and their indices
+
+    for index, num in enumerate(nums):
+        complement = target - num  # Calculate the required complement
+
+        if complement in num_map:
+            # If complement exists in hash table, we've found our pair
+            return [num_map[complement], index]  # Return indices of both numbers
+
+        num_map[num] = index  # Add current number and its index to hash table
+
+    return None  # Return None if no solution is found
+
+## Test Case
+nums = [2, 7, 11, 15]
+target = 9
+result = two_sum(nums, target)
+print(result)  # Output: [0, 1]
+```
+
+*   **Version 2: Clean Implementation**
+
+```python
+def two_sum(nums, target):
+    num_map = {}
+    for index, num in enumerate(nums):
+        complement = target - num
+        if complement in num_map:
+            return [num_map[complement], index]
+        num_map[num] = index
+    return None
+```
+
+**Step-by-Step Execution:**
+
+Let's walk through the solution with input `nums = [2, 7, 11, 15], target = 9`:
+
+1.  Initialize empty hash table `num_map`
+2.  Iterate through `nums` array:
+    *   `num = 2, index = 0`:
+        *   Calculate `complement = 9 - 2 = 7`
+        *   `7` not in `num_map`
+        *   Add `{2: 0}` to `num_map`
+    *   `num = 7, index = 1`:
+        *   Calculate `complement = 9 - 7 = 2`
+        *   `2` found in `num_map`!
+        *   Return `[num_map[2], 1]`, which is `[0, 1]`
+
+Thus, we return `[0, 1]` as our solution.
